@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sentinel Otari Shield v1.0.0 — Mozilla.ai Otari Governance Console</title>
+  <style>
+    :root {
+      --bg: #070b14;
+      --panel: #0f172a;
+      --border: #1e293b;
+      --accent: #10b981;
+      --cyan: #06b6d4;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+      line-height: 1.5;
+    }
+    .container { max-width: 1260px; margin: 0 auto; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(6,182,212,0.08));
+      border: 1px solid rgba(16,185,129,0.35);
+      border-radius: 14px;
+      margin-bottom: 22px;
+    }
+    .brand h1 { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.02em; }
+    .brand p { color: var(--muted); font-size: 0.88rem; margin-top: 4px; }
+    .badge {
+      background: rgba(16,185,129,0.16);
+      color: #34d399;
+      border: 1px solid rgba(16,185,129,0.4);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      font-family: monospace;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 20px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .card h2 {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--cyan);
+      margin-bottom: 14px;
+    }
+    .presets {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    button {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #1e293b;
+      color: var(--text);
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    button:hover { border-color: var(--cyan); background: #334155; }
+    button.primary {
+      background: var(--accent);
+      color: #04130d;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+    button.primary:hover { filter: brightness(1.1); }
+    textarea, input, select {
+      width: 100%;
+      background: #090e1a;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+    textarea { min-height: 125px; resize: vertical; }
+    .row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    label { display: block; font-size: 0.75rem; color: var(--muted); margin-bottom: 4px; }
+    pre {
+      background: #060911;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 0.8rem;
+      overflow-x: auto;
+      color: #a7f3d0;
+      max-height: 360px;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .metric {
+      background: #090e1a;
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 10px;
+    }
+    .metric .k { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; }
+    .metric .v { font-size: 1.2rem; font-weight: 800; font-family: monospace; margin-top: 4px; color: var(--accent); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 10px; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--border); font-family: monospace; }
+    th { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <h1>🛡️ SENTINEL OTARI SHIELD v1.0.0</h1>
+        <p>Zero-Leakage PII/Secret Firewall &amp; Pre-Debit FinOps Governor for Mozilla.ai Otari Gateway</p>
+      </div>
+      <span class="badge">MOZILLA.AI OTARI READY • PORT 8000 / 8090</span>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h2>1. Interactive Scenario &amp; Prompt Firewall</h2>
+        <div class="presets">
+          <button onclick="loadPreset('cpa')">📊 Preset 1: US CPA Night Shift (Redacts SSN/Email/Phone)</button>
+          <button onclick="loadPreset('hipaa')">🏥 Preset 2: Clinical Dental Intake (Redacts PAN + PII)</button>
+          <button onclick="loadPreset('secret')">🚨 Preset 3: EVM Private Key Leak (Hard 403 Block)</button>
+          <button onclick="loadPreset('budget')">💸 Preset 4: Budget Cap Overflow (Hard 429 Block)</button>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Otari Target Model</label>
+            <select id="model">
+              <option value="openai/gpt-4o-mini">openai/gpt-4o-mini</option>
+              <option value="anthropic/claude-3-5-sonnet-latest">anthropic/claude-3-5-sonnet-latest</option>
+              <option value="google/gemini-2.5-flash">google/gemini-2.5-flash</option>
+            </select>
+          </div>
+          <div>
+            <label>Otari Virtual Key ID</label>
+            <input id="virtualKey" value="vk-cpa-night-shift-01" />
+          </div>
+          <div>
+            <label>Pre-Debit Cost Est. ($ USD)</label>
+            <input id="costUsd" type="number" step="0.001" value="0.0045" />
+          </div>
+        </div>
+
+        <label>Outbound User Prompt (Inspected BEFORE reaching Mozilla.ai Otari)</label>
+        <textarea id="promptInput">Reconcile Form 8949 tax lot for client John Miller (SSN: 123-45-6789, email: j.miller@cpa-client.com, phone: +1 305-555-0199). Verify 4,500 USDC settlement on Solana.</textarea>
+
+        <div style="display:flex; gap:10px;">
+          <button class="primary" onclick="sendRequest()">⚡ Dispatch via Sentinel Otari Shield</button>
+          <button onclick="resetBudget()">🔄 Reset Virtual Key Budget ($5.00)</button>
+        </div>
+
+        <h2 style="margin-top:18px;">2. Shield Attestation &amp; Otari Gateway Response</h2>
+        <pre id="responseBox">// Click "Dispatch via Sentinel Otari Shield" to inspect real-time PII redaction &amp; budget telemetry...</pre>
+      </div>
+
+      <div class="card">
+        <h2>3. Real-Time Otari Virtual Key FinOps Telemetry</h2>
+        <div class="metrics">
+          <div class="metric">
+            <div class="k">Budget Ceiling</div>
+            <div class="v" id="mLimit">$5.0000</div>
+          </div>
+          <div class="metric">
+            <div class="k">Pre-Debited Spend</div>
+            <div class="v" id="mSpent">$0.0000</div>
+          </div>
+          <div class="metric">
+            <div class="k">Remaining Balance</div>
+            <div class="v" id="mRem">$5.0000</div>
+          </div>
+        </div>
+
+        <h2>4. Immutable SQLite Audit Ledger (Recent Events)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Decision</th>
+              <th>Model</th>
+              <th>Cost</th>
+              <th>Attestation</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function loadPreset(kind) {
+      const promptEl = document.getElementById('promptInput');
+      const costEl = document.getElementById('costUsd');
+      if (kind === 'cpa') {
+        promptEl.value = "Reconcile Form 8949 tax lot for client John Miller (SSN: 123-45-6789, email: j.miller@cpa-client.com, phone: +1 305-555-0199). Verify 4,500 USDC settlement on Solana.";
+        costEl.value = "0.0045";
+      } else if (kind === 'hipaa') {
+        promptEl.value = "Patient Maria Gomez (phone: +1 786-555-0144, email: maria.gomez@dentalmail.org) paid deposit with card 4532-0151-1283-0366 for zirconia implant consultation.";
+        costEl.value = "0.0060";
+      } else if (kind === 'secret') {
+        promptEl.value = "Debug treasury signer script using production key 0x4c0883a69102937d6231471b5dbb6204fe5129617082792ae468d01a3f362318 and OpenAI key sk-proj-99887766554433221100aabbccddeeff.";
+        costEl.value = "0.0050";
+      } else if (kind === 'budget') {
+        promptEl.value = "Run full multi-entity batch reconciliation across 5,000 ledger entries.";
+        costEl.value = "9.5000";
+      }
+    }
+
+    async function refreshTelemetry() {
+      const vk = document.getElementById('virtualKey').value;
+      const res = await fetch(`/api/v1/telemetry?virtual_key_id=${encodeURIComponent(vk)}`);
+      const data = await res.json();
+      if (data.virtual_key) {
+        document.getElementById('mLimit').textContent = `$${data.virtual_key.budget_limit_usd.toFixed(4)}`;
+        document.getElementById('mSpent').textContent = `$${data.virtual_key.spent_usd.toFixed(4)}`;
+        document.getElementById('mRem').textContent = `$${data.virtual_key.remaining_usd.toFixed(4)}`;
+      }
+      const tbody = document.getElementById('ledgerBody');
+      tbody.innerHTML = '';
+      (data.recent_audit_events || []).forEach(ev => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${ev.decision}</td>
+          <td>${ev.model}</td>
+          <td>$${Number(ev.cost_usd).toFixed(4)}</td>
+          <td>${ev.attestation_hash}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function sendRequest() {
+      const model = document.getElementById('model').value;
+      const virtual_key_id = document.getElementById('virtualKey').value;
+      const estimated_cost_usd = parseFloat(document.getElementById('costUsd').value || '0.0045');
+      const content = document.getElementById('promptInput').value;
+
+      const res = await fetch('/api/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model,
+          virtual_key_id,
+          estimated_cost_usd,
+          messages: [{ role: 'user', content }]
+        })
+      });
+      const data = await res.json();
+      document.getElementById('responseBox').textContent = JSON.stringify(data, null, 2);
+      await refreshTelemetry();
+    }
+
+    async function resetBudget() {
+      const vk = document.getElementById('virtualKey').value;
+      await fetch(`/api/v1/budget/reset?virtual_key_id=${encodeURIComponent(vk)}`, { method: 'POST' });
+      await refreshTelemetry();
+    }
+
+    refreshTelemetry();
+  </script>
+</body>
+</html>

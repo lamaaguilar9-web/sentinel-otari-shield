@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  otari-gateway:
+    image: mzdotai/otari:latest
+    container_name: mozilla-otari-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - OTARI_PROVIDER_ACCOUNT_PEPPER=${OTARI_PROVIDER_ACCOUNT_PEPPER:-sentinel-otari-pepper-change-me}
+      - POSTGRES_USER=${POSTGRES_USER:-otari}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-otari_dev_pass}
+      - POSTGRES_DB=${POSTGRES_DB:-otari}
+
+  sentinel-otari-shield:
+    build: .
+    container_name: sentinel-otari-shield
+    ports:
+      - "8090:8090"
+    environment:
+      - OTARI_BASE_URL=http://otari-gateway:8000/api/v1
+      - OTARI_VIRTUAL_KEY=${OTARI_VIRTUAL_KEY:-otari-vk-demo-mode}
+      - OTARI_DEFAULT_BUDGET_USD=5.00
+      - OTARI_STRICT_SECRET_BLOCKING=true
+    depends_on:
+      - otari-gateway
