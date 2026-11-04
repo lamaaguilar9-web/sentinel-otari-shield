@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Runtime SQLite ledger databases & WAL files
+*.db
+*.db-shm
+*.db-wal
+otari_shield/data/
+
+# Internal audit notes & OS artifacts
+AUDITORIA_HERMES_OTARI.md
+.DS_Store
+Thumbs.db
