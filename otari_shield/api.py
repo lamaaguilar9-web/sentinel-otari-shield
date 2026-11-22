@@ -172,6 +172,7 @@ def create_chat_completion(
         latency_ms = round((time.perf_counter() - t0) * 1000.0, 2)
         return JSONResponse(
             status_code=403,
+            headers={"X-Otari-Shield-Attestation": last_attestation},
             content={
                 "error": {
                     "code": "OTARI_SHIELD_SECRET_BLOCKED",
@@ -199,6 +200,7 @@ def create_chat_completion(
         latency_ms = round((time.perf_counter() - t0) * 1000.0, 2)
         return JSONResponse(
             status_code=429,
+            headers={"X-Otari-Shield-Attestation": last_attestation},
             content={
                 "error": {
                     "code": "OTARI_SHIELD_BUDGET_EXCEEDED",
@@ -220,6 +222,7 @@ def create_chat_completion(
 
     return JSONResponse(
         status_code=200,
+        headers={"X-Otari-Shield-Attestation": last_attestation},
         content={
             **upstream_response,
             "otari_shield": {

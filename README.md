@@ -63,5 +63,5 @@ docker compose up --build
 ---
 
 ## 🏛️ Built by Sentinel Fleet Technologies
-- **Author:** Luis Aguilar — Founder & CEO, [Sentinel Fleet Technologies](https://lamaaguilar9-web.github.io/sentinel-fleet/)
+- **Author:** Luis Aguilar — Founder & CEO, [Sentinel Fleet Technologies](https://sentinelfleet.tech)
 - **Contact:** `lamaaguilar9@gmail.com`

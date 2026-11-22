@@ -20,7 +20,7 @@ services:
     environment:
       - OTARI_BASE_URL=http://otari-gateway:8000/api/v1
       - OTARI_VIRTUAL_KEY=${OTARI_VIRTUAL_KEY:-otari-vk-demo-mode}
-      - OTARI_DEFAULT_BUDGET_USD=5.00
+      - OTARI_DAILY_BUDGET_USD=5.00
       - OTARI_STRICT_SECRET_BLOCKING=true
     depends_on:
       - otari-gateway

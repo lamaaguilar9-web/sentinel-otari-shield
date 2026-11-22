@@ -44,6 +44,7 @@ class ZeroLeakageRedactor:
     LATAM_NIT_RUT_RE = re.compile(r"\b\d{1,3}\.\d{3}\.\d{3}-[\dkK]\b")
     CREDIT_CARD_RE = re.compile(r"\b(?:\d{4}[-\s]?){3}\d{4}\b")
     EMAIL_PII_RE = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b")
+    PHONE_PII_RE = re.compile(r"(?:\+\d{1,3}[-.\s]?)?(?:\(\d{3}\)|\b\d{3})[-.\s]\d{3}[-.\s]\d{4}\b")
 
     def __init__(self, block_on_crypto_keys: bool = True):
         self.block_on_crypto_keys = block_on_crypto_keys
@@ -127,6 +128,23 @@ class ZeroLeakageRedactor:
                 "handling": "REDACTED"
             })
             sanitized = self.LATAM_NIT_RUT_RE.sub("[REDACTED_LATAM_NIT]", sanitized)
+
+        # 7. Sanitize Email Addresses and Phone Numbers
+        if self.EMAIL_PII_RE.search(sanitized):
+            findings.append({
+                "type": "EMAIL_ADDRESS_PII",
+                "severity": "MEDIUM_PII",
+                "handling": "REDACTED"
+            })
+            sanitized = self.EMAIL_PII_RE.sub("[REDACTED_EMAIL]", sanitized)
+
+        if self.PHONE_PII_RE.search(sanitized):
+            findings.append({
+                "type": "PHONE_NUMBER_PII",
+                "severity": "MEDIUM_PII",
+                "handling": "REDACTED"
+            })
+            sanitized = self.PHONE_PII_RE.sub("[REDACTED_PHONE]", sanitized)
 
         san_hash = hashlib.sha256(sanitized.encode("utf-8")).hexdigest()
         att_seed = f"{orig_hash}:{san_hash}:{len(findings)}"

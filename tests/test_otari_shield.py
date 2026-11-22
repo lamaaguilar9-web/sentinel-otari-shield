@@ -14,7 +14,8 @@ def test_redactor_sanitizes_pii_and_international_tax_ids() -> None:
     redactor = ZeroLeakageRedactor(block_on_crypto_keys=True)
     raw = (
         "Client John Doe SSN 123-45-6789, EIN 12-3456789, RFC XAXX010101000, "
-        "NIT 900.123.456-7, card 4532-0151-1283-0366."
+        "NIT 900.123.456-7, card 4532-0151-1283-0366, email john.doe@example.com, "
+        "phone (555) 234-5678."
     )
     res = redactor.inspect_and_sanitize(raw)
     assert res.approved is True
@@ -24,11 +25,15 @@ def test_redactor_sanitizes_pii_and_international_tax_ids() -> None:
     assert "XAXX010101000" not in res.sanitized_text
     assert "900.123.456-7" not in res.sanitized_text
     assert "4532-0151-1283-0366" not in res.sanitized_text
+    assert "john.doe@example.com" not in res.sanitized_text
+    assert "(555) 234-5678" not in res.sanitized_text
     assert "[REDACTED_US_SSN]" in res.sanitized_text
     assert "[REDACTED_US_EIN]" in res.sanitized_text
     assert "[REDACTED_MX_RFC]" in res.sanitized_text
     assert "[REDACTED_LATAM_NIT]" in res.sanitized_text
     assert "[REDACTED_CARD_PAN]" in res.sanitized_text
+    assert "[REDACTED_EMAIL]" in res.sanitized_text
+    assert "[REDACTED_PHONE]" in res.sanitized_text
     assert res.attestation_id.startswith("OTARI-CLEAN-")
 
 
@@ -102,6 +107,7 @@ def test_fastapi_endpoints_and_otari_shield_workflow() -> None:
         },
     )
     assert resp.status_code == 200
+    assert resp.headers.get("X-Otari-Shield-Attestation", "").startswith("OTARI-CLEAN-")
     body = resp.json()
     assert "otari_shield" in body
     assert len(body["otari_shield"]["findings"]) == 2
